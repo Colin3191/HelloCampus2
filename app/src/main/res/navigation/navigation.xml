@@ -78,7 +78,11 @@
         android:id="@+id/addFragment"
         android:name="com.example.hellocampus.home.AddFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_addFragment_to_setTagFragment"
+            app:destination="@id/setTagFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editFragment"
         android:name="com.example.hellocampus.home.EditFragment"
@@ -102,5 +106,14 @@
         <action
             android:id="@+id/action_profileDetailFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setTagFragment"
+        android:name="com.example.hellocampus.home.SetTagFragment"
+        android:label="fragment_set_tag"
+        tools:layout="@layout/fragment_set_tag" >
+        <action
+            android:id="@+id/action_setTagFragment_to_addFragment"
+            app:destination="@id/addFragment" />
     </fragment>
 </navigation>

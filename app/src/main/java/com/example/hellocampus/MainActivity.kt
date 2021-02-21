@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
             if (destination.id == R.id.loginFragment
                 || destination.id == R.id.registerFragment
                 || destination.id == R.id.profileDetailFragment
+                || destination.id == R.id.addFragment
+                || destination.id == R.id.setTagFragment
             ) {
                 bottomNavigationView.visibility =
                     View.GONE
