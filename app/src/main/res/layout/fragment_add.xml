@@ -298,7 +298,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/image1"
         app:layout_constraintStart_toEndOf="@+id/image1"
-        app:layout_constraintTop_toTopOf="@+id/image1" />
+        app:layout_constraintTop_toTopOf="@+id/image1"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/image3"
@@ -311,7 +312,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/image2"
         app:layout_constraintStart_toEndOf="@+id/image2"
-        app:layout_constraintTop_toTopOf="@+id/image2" />
+        app:layout_constraintTop_toTopOf="@+id/image2"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/submit"
@@ -327,27 +329,30 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_remove"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/space1"
         app:layout_constraintStart_toStartOf="@+id/space1"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/imageRemove2"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_remove"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/space2"
         app:layout_constraintStart_toStartOf="@+id/space2"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/imageRemove3"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_remove"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/space3"
         app:layout_constraintStart_toStartOf="@+id/space3"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <Space
         android:id="@+id/space1"
