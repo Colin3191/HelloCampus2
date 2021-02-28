@@ -3,24 +3,32 @@ package com.example.hellocampus.home
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.TimeZone
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.FileUtils
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.webkit.MimeTypeMap
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import cn.leancloud.AVFile
+import cn.leancloud.AVObject
+import cn.leancloud.AVQuery
+import cn.leancloud.AVUser
 import com.bumptech.glide.Glide
 import com.example.hellocampus.R
 import com.example.hellocampus.matisse.GifSizeFilter
@@ -29,9 +37,14 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import com.zhihu.matisse.filter.Filter
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
+import java.io.File
+import java.io.FileOutputStream
 import java.text.ParseException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 
 class AddFragment : Fragment() {
@@ -59,9 +72,11 @@ class AddFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val editTextTitle = requireActivity().findViewById<EditText>(R.id.editTextTitle)
         val editTextLocation = requireActivity().findViewById<EditText>(R.id.editTextLocation)
+        val editTextContent = requireActivity().findViewById<EditText>(R.id.editTextContent)
         val setTag = requireActivity().findViewById<ConstraintLayout>(R.id.setTag)
         val setStartTime = requireActivity().findViewById<TextView>(R.id.startTime)
         val setEndTime = requireActivity().findViewById<TextView>(R.id.endTime)
+        val submitBtn = requireActivity().findViewById<Button>(R.id.submit)
         addImage1 = requireActivity().findViewById(R.id.image1)
         addImage2 = requireActivity().findViewById(R.id.image2)
         addImage3 = requireActivity().findViewById(R.id.image3)
@@ -75,6 +90,62 @@ class AddFragment : Fragment() {
         imageRemoves.add(imageRemove2!!)
         imageRemoves.add(imageRemove3!!)
 
+        // 发布活动
+        submitBtn.setOnClickListener {
+            val title = editTextTitle.text
+            val location = editTextLocation.text
+            val content = editTextContent.text
+            val picUrls: ArrayList<String> = arrayListOf()
+            val event = AVObject("event")
+            val currentUser = AVUser.currentUser()
+            event.put("username", currentUser)
+            event.put("title", title)
+            event.put("location", location)
+            event.put("content", content)
+            event.put("startTime", startTime)
+            event.put("endTime", endTime)
+            selected.forEach {
+                val file = AVFile("name.jpg", uriToFileQ(requireContext(), it))
+                file.saveInBackground().subscribe(object : Observer<AVFile> {
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onNext(t: AVFile) {
+                        picUrls.add(t.url)
+
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+
+                    override fun onComplete() {
+                        if (selected.size == picUrls.size) {
+                            event.put("pics", picUrls)
+                            event.saveInBackground().subscribe(object : Observer<AVObject> {
+                                override fun onSubscribe(d: Disposable) {
+
+                                }
+
+                                override fun onNext(t: AVObject) {
+
+                                }
+
+                                override fun onError(e: Throwable) {
+
+                                }
+
+                                override fun onComplete() {
+                                    // 保存完成，跳转到首页
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+
+
+        }
+        // 设置开始时间
         setStartTime.setOnClickListener {
 
             val datePickerDialog = DatePickerDialog(requireContext())
@@ -142,6 +213,7 @@ class AddFragment : Fragment() {
 
         }
 
+        // 添加图片
         addImage1?.setOnClickListener {
 
             PermissionX.init(activity)
@@ -272,5 +344,37 @@ class AddFragment : Fragment() {
 
         }
     }
+
+    // 通过uri获取文件
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun uriToFileQ(context: Context, uri: Uri): File? =
+        if (uri.scheme == ContentResolver.SCHEME_FILE)
+            File(requireNotNull(uri.path))
+        else if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+            //把文件保存到沙盒
+            val contentResolver = context.contentResolver
+            val displayName = run {
+                val cursor = contentResolver.query(uri, null, null, null, null)
+                cursor?.let {
+                    if (it.moveToFirst())
+                        it.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    else null
+                }
+            } ?: "${System.currentTimeMillis()}${Random.nextInt(0, 9999)}.${
+                MimeTypeMap.getSingleton()
+                    .getExtensionFromMimeType(contentResolver.getType(uri))
+            }"
+
+            val ios = contentResolver.openInputStream(uri)
+            if (ios != null) {
+                File("${context.externalCacheDir!!.absolutePath}/$displayName")
+                    .apply {
+                        val fos = FileOutputStream(this)
+                        FileUtils.copy(ios, fos)
+                        fos.close()
+                        ios.close()
+                    }
+            } else null
+        } else null
 
 }
