@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:clickable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="false"
+        android:padding="8dp"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第一届计算机知识竞赛"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewTag1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/WhiteSmoke"
+            android:text="计算机"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+        <ImageView
+            android:id="@+id/imageViewIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTag1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/textViewPublish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Colin"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
+            app:layout_constraintTop_toTopOf="@+id/imageViewIcon" />
+
+        <TextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="一教 203"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewPublish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewPublish" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="·"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewPublish"
+            app:layout_constraintStart_toEndOf="@+id/textViewPublish"
+            app:layout_constraintTop_toTopOf="@+id/textViewPublish" />
+
+        <TextView
+            android:id="@+id/textViewUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="计算机协会"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewPublish"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintTop_toTopOf="@+id/textViewPublish" />
+
+        <TextView
+            android:id="@+id/textViewTag2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/WhiteSmoke"
+            android:text="知识竞赛"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTag1"
+            app:layout_constraintStart_toEndOf="@+id/textViewTag1"
+            app:layout_constraintTop_toTopOf="@+id/textViewTag1" />
+
+        <TextView
+            android:id="@+id/textViewTag3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/WhiteSmoke"
+            android:text="有证书"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTag2"
+            app:layout_constraintStart_toEndOf="@+id/textViewTag2"
+            app:layout_constraintTop_toTopOf="@+id/textViewTag2" />
+
+        <TextView
+            android:id="@+id/textViewTag4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/WhiteSmoke"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTag3"
+            app:layout_constraintStart_toEndOf="@+id/textViewTag3"
+            app:layout_constraintTop_toTopOf="@+id/textViewTag3"
+            tools:text="tag4" />
+
+        <TextView
+            android:id="@+id/textViewTag5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/WhiteSmoke"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTag4"
+            app:layout_constraintStart_toEndOf="@+id/textViewTag4"
+            app:layout_constraintTop_toTopOf="@+id/textViewTag4"
+            tools:text="tag5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

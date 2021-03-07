@@ -10,6 +10,7 @@ import cn.leancloud.AVObject
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        // 初始化learn cloud
         AVOSCloud.initialize(
             this, "0iVGWvU1iCWSgkWMACcscDLS-9Nh9j0Va",
             "zmNhU1Kqdh8434BwCrMm9nNv",

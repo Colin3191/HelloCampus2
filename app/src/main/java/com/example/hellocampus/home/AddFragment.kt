@@ -27,7 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import cn.leancloud.AVFile
 import cn.leancloud.AVObject
-import cn.leancloud.AVQuery
 import cn.leancloud.AVUser
 import com.bumptech.glide.Glide
 import com.example.hellocampus.R
@@ -43,7 +42,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.ParseException
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
@@ -64,7 +62,6 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add, container, false)
     }
 
@@ -92,55 +89,80 @@ class AddFragment : Fragment() {
 
         // 发布活动
         submitBtn.setOnClickListener {
-            val title = editTextTitle.text
-            val location = editTextLocation.text
-            val content = editTextContent.text
+            val title = editTextTitle.text.toString()
+            val location = editTextLocation.text.toString()
+            val content = editTextContent.text.toString()
             val picUrls: ArrayList<String> = arrayListOf()
-            val event = AVObject("event")
-            val currentUser = AVUser.currentUser()
+            val event = AVObject("Event")
+            val currentUser = AVUser.currentUser().username
             event.put("username", currentUser)
             event.put("title", title)
             event.put("location", location)
             event.put("content", content)
             event.put("startTime", startTime)
             event.put("endTime", endTime)
-            selected.forEach {
-                val file = AVFile("name.jpg", uriToFileQ(requireContext(), it))
-                file.saveInBackground().subscribe(object : Observer<AVFile> {
-                    override fun onSubscribe(d: Disposable) {
-                    }
+            event.saveInBackground().subscribe(object : Observer<AVObject> {
+                override fun onSubscribe(d: Disposable) {}
 
-                    override fun onNext(t: AVFile) {
-                        picUrls.add(t.url)
+                override fun onNext(t: AVObject) {
+                    Log.d("qqq", "onNext: success")
+                }
 
+                override fun onError(e: Throwable) {
+                    Log.d("qqq", "onError: ${e.message}")
+                }
+
+                override fun onComplete() {}
+            })
+            if (selected.isEmpty()) {
+                event.saveInBackground().subscribe(object : Observer<AVObject> {
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: AVObject) {
+                        Log.d("qqq", "onNext: next!!!")
                     }
 
                     override fun onError(e: Throwable) {
+                        Log.d("qqq", "onError: $e")
                     }
 
-                    override fun onComplete() {
-                        if (selected.size == picUrls.size) {
-                            event.put("pics", picUrls)
-                            event.saveInBackground().subscribe(object : Observer<AVObject> {
-                                override fun onSubscribe(d: Disposable) {
-
-                                }
-
-                                override fun onNext(t: AVObject) {
-
-                                }
-
-                                override fun onError(e: Throwable) {
-
-                                }
-
-                                override fun onComplete() {
-                                    // 保存完成，跳转到首页
-                                }
-                            })
-                        }
-                    }
+                    override fun onComplete() {}
                 })
+            } else {
+                selected.forEach {
+                    val file = AVFile("name.jpg", uriToFileQ(requireContext(), it))
+                    file.saveInBackground().subscribe(object : Observer<AVFile> {
+                        override fun onSubscribe(d: Disposable) {}
+
+                        override fun onNext(t: AVFile) {
+                            picUrls.add(t.url)
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onComplete() {
+                            if (selected.size == picUrls.size) {
+                                event.put("pics", picUrls)
+                                event.saveInBackground().subscribe(object : Observer<AVObject> {
+                                    override fun onSubscribe(d: Disposable) {}
+
+                                    override fun onNext(t: AVObject) {
+                                        // 保存完成，跳转到首页
+                                    }
+
+                                    override fun onError(e: Throwable) {
+                                        Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+
+                                    override fun onComplete() {}
+                                })
+                            }
+                        }
+                    })
+                }
             }
 
 
